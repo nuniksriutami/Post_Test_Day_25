@@ -3,6 +3,8 @@ package com.juaracoding;
 import com.juaracoding.drivers.DriverSingleton;
 import com.juaracoding.pages.LoginPage;
 import com.juaracoding.pages.RecruitmentPage;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.And;
@@ -14,6 +16,7 @@ import org.testng.Assert;
 
 public class RecruitmentTest {
     private static WebDriver driver;
+    public static ExtentTest extentTest;
     private static LoginPage loginPage = new LoginPage();
     private static RecruitmentPage recruitmentPage = new RecruitmentPage();
 
@@ -28,22 +31,35 @@ public class RecruitmentTest {
     }
 
     @When("Admin masuk ke menu Recruitment")
-    public void admin_masuk_ke_menu_Recruitment(){
-        // code
+    public void admin_mengakses_halaman_recruitment(){
+        recruitmentPage.clickBtnMenu();
+        extentTest.log(LogStatus.PASS, "Admin masuk ke menu Recruitment");
     }
 
     @And("Admin memilih opsi Tambah Kandidat")
-    public void admin_memilih_opsi_tambah_kandidat(){
-        // code
+    public void admin_tambah_kandidat(){
+        recruitmentPage.clickAdd();
+        extentTest.log(LogStatus.PASS, "Admin memilih opsi Tambah Kandidat");
     }
 
     @Then("Sistem menampilkan pesan sukses yang mengkonfirmasi penambahan data kandidat")
-    public void sistem_menampilkan_pesan_sukses_yang_mengkonfirmasi_penambahan_data_kandidat(){
-        // code
+    public void admin_sukses_menambah_kandidat(){
+        recruitmentPage.inputFirstName("Nunik");
+        recruitmentPage.inputMiddleName("Sri");
+        recruitmentPage.inputLastName("Utami");
+        recruitmentPage.inputEmail("nunik.utami12@gmail.com");
+        recruitmentPage.inputContact("085888174889");
+        recruitmentPage.inputNotes("test");
+        recruitmentPage.clickselectVacancy("4");
+        recruitmentPage.clickkeepData();
+        recruitmentPage.clickbtnSave();
+        Assert.assertEquals(recruitmentPage.getTxtStatus(), "Status: Application Initiated");
+        extentTest.log(LogStatus.PASS, "Sistem menampilkan pesan sukses yang mengkonfirmasi penambahan data kandidat");
     }
 
     @And("Data kandidat ditambahkan ke sistem dengan informasi yang sesuai")
-    public void data_kandidat_ditambahkan_ke_sistem_dengan_informasi_yang_sesuai(){
-        // code
+    public void admin_memastikan_data_kandidat_sesuai(){
+        Assert.assertEquals(recruitmentPage.getTxtCandidateName(), "kiki bayu destara");
+        extentTest.log(LogStatus.PASS, "Data kandidat ditambahkan ke sistem dengan informasi yang sesuai");
     }
 }
